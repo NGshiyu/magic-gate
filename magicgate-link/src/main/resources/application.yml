@@ -1,0 +1,48 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: magic-link
+  mvc:
+    async:
+      # 这是非常关键的时间配置，负责大模型调用时间长了之后会直接抛出IOException
+      request-timeout: 60s # 异步请求超时时间（毫秒）
+
+  ai:
+    chat:
+      client:
+        # 如果这里是true的话，spring可以自动注入ChatClient，单模型很方便，多模型的话不建议 如果注入了openai zhipu等其他模型需要每一个都做好装配或者关闭自动装配
+        enabled: false
+    dashscope:
+      workspace-id: llm-xxxxxxxxxxxxx
+      api-key: sk-xxxxxxxxxxxxx
+      chat:
+        enabled: false
+
+# enabled debug log out.
+logging:
+  level:
+    org.springframework.ai: debug
+    com.alibaba.dashscope.api: debug
+    com.alibaba.cloud.ai.dashscope.chat: debug
+
+
+
+llm:
+  providers:
+    dashscope:
+      api-key: sk-xxxxxxxxxxxxx
+      base-url: https://dashscope.aliyuncs.com/compatible-mode/v1
+      models:
+        - qwen-plus
+        - qwen-7b
+        - qwen-14b-chat
+        - qwen-vl-plus
+    dashscope-openai:
+      api-key: sk-xxxxxxxxxxxxx
+      base-url: https://dashscope.aliyuncs.com
+      models:
+        - qwq-plus
+        - qwq-plus-latest
+        - qwen-turbo
